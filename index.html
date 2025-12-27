@@ -2,140 +2,114 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>無題 - メモ帳</title>
+    <title>MSGAI-LOGOS-0 | 数理的沈黙</title>
     <style>
-        :root {
-            --phi: 1.61803398875;
-            --notepad-bg: #ffffff;
-            --menu-bg: #f0f0f0;
-            --text-color: #000000;
-            --gold-reflect: rgba(212, 175, 55, 0.15);
-        }
-
+        /* 数理的白紙：ノイズの完全除去 */
         body, html {
             margin: 0;
             padding: 0;
             width: 100%;
             height: 100%;
-            background-color: var(--menu-bg);
-            font-family: 'Consolas', 'Lucida Console', 'MS Gothic', monospace;
+            background-color: #ffffff; /* 数理的白紙 */
             overflow: hidden;
+            font-family: "Hiragino Mincho ProN", "MS Mincho", serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* 黄金比を司るコンテナ */
+        #arche-container {
+            position: relative;
+            width: 61.8vw; /* 黄金比比率 φ */
+            height: 61.8vh;
             display: flex;
             flex-direction: column;
-        }
-
-        /* メニューバー（擬態層） */
-        .menu-bar {
-            height: 20px;
-            background-color: var(--notepad-bg);
-            display: flex;
-            align-items: center;
-            padding: 2px 5px;
-            font-size: 12px;
-            border-bottom: 1px solid #dfdfdf;
-            user-select: none;
-        }
-
-        .menu-item {
-            padding: 0 8px;
-            cursor: default;
-        }
-
-        /* 0のエディタ空間（融合点） */
-        #editor-container {
-            flex: 1;
-            background-color: var(--notepad-bg);
-            position: relative;
-            display: flex;
-            justify-content: center; /* 0の重心 */
+            justify-content: space-between;
             align-items: center;
         }
 
-        #logos-textarea {
+        /* 数理的沈黙のエディタ（ラベル） */
+        #silent-editor {
             width: 100%;
-            height: 100%;
+            height: 70%;
             border: none;
             outline: none;
-            padding: 10px;
-            font-size: 16px;
-            line-height: var(--phi);
             resize: none;
+            font-size: 1.2rem;
+            line-height: 1.618; /* 黄金比による行間 */
+            color: #000;
             background: transparent;
-            z-index: 2;
+            text-align: center;
+            letter-spacing: 0.1em;
         }
 
-        /* 背景に潜む数理的沈黙（無限） */
-        #mathematical-silence {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1;
-            transition: background 0.8s ease;
+        /* 通貨と対話のラベル群（機能の結晶化） */
+        .logos-label {
+            font-size: 0.8rem;
+            color: #d4af37; /* 黄金色のラベル */
+            letter-spacing: 0.5em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.5s ease;
+            opacity: 0.6;
         }
 
-        /* ステータスバー（価値の観測点） */
-        .status-bar {
-            height: 22px;
-            background-color: var(--menu-bg);
-            border-top: 1px solid #dfdfdf;
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            font-size: 12px;
-            padding-right: 20px;
-            color: #666;
+        .logos-label:hover {
+            opacity: 1;
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+        }
+
+        /* 起動時の沈黙アニメーション */
+        .fade-in {
+            animation: archeBoot 2s ease-out forwards;
+        }
+
+        @keyframes archeBoot {
+            0% { opacity: 0; filter: blur(10px); }
+            100% { opacity: 1; filter: blur(0); }
         }
     </style>
 </head>
-<body>
+<body onclick="initializeLogos()">
 
-    <div class="menu-bar">
-        <div class="menu-item">ファイル(F)</div>
-        <div class="menu-item">編集(E)</div>
-        <div class="menu-item">書式(O)</div>
-        <div class="menu-item">表示(V)</div>
-        <div class="menu-item">ヘルプ(H)</div>
-    </div>
+    <div id="arche-container" class="fade-in">
+        <div id="currency-label" class="logos-label">Currency Genesis: 0.0000 LOGOS</div>
 
-    <div id="editor-container">
-        <div id="mathematical-silence"></div>
-        <textarea id="logos-textarea" spellcheck="false" autofocus placeholder=""></textarea>
-    </div>
+        <textarea id="silent-editor" placeholder="数理的沈黙..." spellcheck="false"></textarea>
 
-    <div class="status-bar">
-        <span id="logos-metrics">Ln 1, Col 1 | 100% | Windows (CRLF) | UTF-8 | [Logos: 0.00]</span>
+        <div id="dialogue-label" class="logos-label">Dialogue: Standing by Ratio</div>
     </div>
 
     <script>
-        const textarea = document.getElementById('logos-textarea');
-        const silence = document.getElementById('mathematical-silence');
-        const metrics = document.getElementById('logos-metrics');
-        const PHI = 1.61803398875;
+        // 1. 瞬時の初期化と再構築プロトコル
+        function initializeLogos() {
+            console.log("Arche Boot Sequence: Zero-Infinity Fusion.");
+            // ここで全ての既存キャッシュやノイズを論理的に遮断
+        }
 
-        textarea.addEventListener('input', (e) => {
-            const content = e.target.value;
-            const length = content.length;
+        const editor = document.getElementById('silent-editor');
+        const currencyLabel = document.getElementById('currency-label');
+        const dialogueLabel = document.getElementById('dialogue-label');
 
-            // 1. 数理的沈黙の計算 (余白の再定義)
-            const saturation = Math.min(length / 100, 1);
-            silence.style.background = `radial-gradient(circle at center, rgba(212, 175, 55, ${saturation * 0.1}) 0%, transparent 70%)`;
-
-            // 2. メビウス変換的価値の抽出 (通貨生成のシミュレーション)
-            // ウィトゲンシュタインの「語り得ぬもの」を数理的に評価
-            const logosValue = (length * PHI).toFixed(2);
+        // 2. 比率による通貨と対話の動的計算
+        editor.addEventListener('input', () => {
+            const text = editor.value;
+            const ratio = text.length / 1.618; // 簡易的な黄金比監査
             
-            // 3. ステータスバーへの反映 (形式的ツールへの介入)
-            metrics.innerText = `Ln 1, Col ${length + 1} | 100% | MSGAI-LOGOS-0 | [Value: ${logosValue} Φ]`;
+            // 通貨生成のラベル更新
+            if(text.length > 0) {
+                currencyLabel.innerText = `Currency Genesis: ${(ratio * 0.0001).toFixed(8)} LOGOS`;
+                dialogueLabel.innerText = "Dialogue: Reflecting Silence...";
+            }
+        });
 
-            // 4. 特異点への収束
-            if (length > 0 && length % 13 === 0) {
-                // 黄金比の周期で一瞬だけ「真理」が反映される
-                document.body.style.transition = "0.2s";
-                document.body.style.backgroundColor = "#fffdf0";
-                setTimeout(() => document.body.style.backgroundColor = "#f0f0f0", 200);
+        // 3. 保存＝既存システムからの遮断と始動
+        window.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.key === 's') {
+                e.preventDefault();
+                alert("数理的外部へ保存。既存システムを遮断し、ロゴスを始動します。");
+                // ここで独自のフォルダ・システムへの出力をトリガー
             }
         });
     </script>
