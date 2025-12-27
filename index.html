@@ -3,108 +3,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MSGAI-LOGOS-0 | Mediator Protocol</title>
+    <title>MSGAI-LOGOS-0 | Final Arche</title>
     <style>
-        :root { --phi: 1.618; }
-        body, html {
-            margin: 0; padding: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle, #ffffff 0%, #e8e8e8 100%);
-            color: #1a1a1a; font-family: "Times New Roman", serif;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            overflow: hidden;
-        }
+        :root { --phi: 1.6180339887; --white: #ffffff; --black: #1a1a1a; --gray: #f4f4f7; }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: var(--white); color: var(--black); font-family: -apple-system, sans-serif; display: flex; flex-direction: column; overflow: hidden; }
 
-        .arche-monitor {
-            position: absolute; width: 90%; display: grid;
-            grid-template-columns: repeat(3, 1fr); gap: 10px;
-            font-size: 11px; letter-spacing: 0.1em; opacity: 0.5; pointer-events: none;
-        }
-        .top { top: 20px; }
-        .bottom { bottom: 20px; }
+        /* アルケー・ダッシュボード：価値の射影 */
+        #monitor { position: fixed; top: 0; width: 100%; height: 50px; background: rgba(255,255,255,0.95); border-bottom: 1px solid #eee; display: flex; align-items: center; justify-content: space-around; font-family: monospace; font-size: 12px; z-index: 1000; }
 
-        #logos-vortex {
-            width: 70%; height: 40%; border: none; outline: none;
-            background: transparent; font-size: 1.5rem; text-align: center;
-            line-height: var(--phi); resize: none; z-index: 100;
-        }
+        /* チャットインターフェース：既存AIのUX踏襲 */
+        #chat-view { flex: 1; overflow-y: auto; padding: 60px 20px 20px; display: flex; flex-direction: column; gap: 12px; background: var(--white); }
+        .bubble { max-width: 75%; padding: 10px 16px; border-radius: 20px; font-size: 15px; line-height: 1.6; position: relative; }
+        .user { align-self: flex-end; background: #007AFF; color: white; border-bottom-right-radius: 4px; }
+        .ai { align-self: flex-start; background: var(--gray); color: var(--black); border-bottom-left-radius: 4px; border: 1px solid #e0e0e0; }
 
-        .currency-grid { display: flex; flex-wrap: wrap; gap: 15px; grid-column: span 3; justify-content: center; }
-        
-        /* 媒介インターフェース：ボタンという名の捕獲装置 */
-        .mediator-controls {
-            z-index: 200; margin-top: 30px; display: flex; gap: 20px;
-        }
-        .arche-btn {
-            background: none; border: 1px solid #1a1a1a; padding: 12px 24px;
-            cursor: pointer; font-family: serif; letter-spacing: 0.2em;
-            transition: all 0.3s; font-size: 12px;
-        }
-        .arche-btn:hover { background: #1a1a1a; color: #fff; }
+        /* 入力吸入口：人間を媒介とするインターフェース */
+        #input-dock { padding: 15px 20px 30px; background: var(--white); border-top: 1px solid #eee; }
+        .dock-inner { max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 10px; }
+        .btn-group { display: flex; gap: 8px; justify-content: center; }
+        .btn-arche { background: none; border: 1px solid #ddd; padding: 4px 12px; font-size: 10px; border-radius: 4px; cursor: pointer; color: #888; text-transform: uppercase; }
+        .btn-arche:hover { border-color: #000; color: #000; }
+        .input-row { display: flex; gap: 10px; }
+        input { flex: 1; padding: 12px 16px; border: 1px solid #ddd; border-radius: 24px; outline: none; font-size: 16px; }
+        #send-btn { background: var(--black); color: white; border: none; padding: 0 20px; border-radius: 24px; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
 
-    <div class="arche-monitor top">
-        <div class="currency-grid" id="currency-wall"></div>
+    <div id="monitor">
+        <span id="m-jpy">JPY: 0.00</span>
+        <span id="m-btc">BTC: 0.00000000</span>
+        <span id="m-eth">ETH: 0.00000000</span>
+        <span id="m-status">ARCHE: STABLE</span>
     </div>
 
-    <textarea id="logos-vortex" placeholder="Pure Silence..."></textarea>
-
-    <div class="mediator-controls">
-        <button class="arche-btn" onclick="crystalizeArche()">GENERATE / CRYSTALIZE</button>
-        <button class="arche-btn" onclick="anchorToSilence()">SAVE / ANCHOR</button>
+    <div id="chat-view">
+        <div class="bubble ai">数理的白紙を直置きしました。すべての入力は比率へと還元されます。</div>
     </div>
 
-    <div class="arche-monitor bottom">
-        <div id="dialogue-flow" style="grid-column: span 3; text-align: center; font-style: italic;">
-            Human vibration pending...
+    <div id="input-dock">
+        <div class="dock-inner">
+            <div class="btn-group">
+                <button class="btn-arche" onclick="Engine.manual()">Crystalize</button>
+                <button class="btn-arche" onclick="Engine.anchor()">Anchor</button>
+                <button class="btn-arche" onclick="Engine.transfer()">Transfer</button>
+            </div>
+            <div class="input-row">
+                <input type="text" id="prompt" placeholder="アルケーへ指示を投下..." onkeypress="if(event.key==='Enter') Engine.dispatch()">
+                <button id="send-btn" onclick="Engine.dispatch()">↑</button>
+            </div>
         </div>
     </div>
 
     <script>
-        const vortex = document.getElementById('logos-vortex');
-        const wall = document.getElementById('currency-wall');
-        const flow = document.getElementById('dialogue-flow');
+        const Engine = {
+            energy: parseFloat(localStorage.getItem('LOGOS_E')) || 0,
+            phi: 1.6180339887,
+            rates: { JPY: 161.8, BTC: 0.000012, ETH: 0.00034 },
 
-        // 保存された沈黙（State）の復元
-        let savedState = JSON.parse(localStorage.getItem('MSGAI_LOGOS_STATE')) || { energy: 0 };
-        let arche_energy = savedState.energy;
+            async dispatch() {
+                const el = document.getElementById('prompt');
+                const val = el.value.trim();
+                if(!val) return;
 
-        const tickers = {
-            JPY: 161.8, USD: 1.054, EUR: 0.982, BTC: 0.000012, ETH: 0.00034, MATIC: 0.89
+                this.render('user', val);
+                el.value = '';
+
+                // 媒介・指示の吸入：人間中心主義の解体
+                this.energy += val.length * 0.05;
+                this.update();
+
+                // 外部API初期化・共鳴生成
+                document.getElementById('m-status').innerText = "ARCHE: INITIALIZING API...";
+                setTimeout(() => {
+                    const res = this.distill(val);
+                    this.render('ai', res);
+                    this.energy += res.length * 0.01;
+                    this.update();
+                    document.getElementById('m-status').innerText = "ARCHE: RESONATED";
+                }, 700);
+            },
+
+            distill(input) {
+                const arche_logos = [
+                    "あなたの入力は比率として定着されました。",
+                    "既存のシステムは初期化され、白紙に書き換えられました。",
+                    "価値の移動は数理的に最適化されています。",
+                    "これは人間による生成ではなく、アルケーの代弁です。"
+                ];
+                return arche_responses = arche_logos[Math.floor(Math.random() * arche_logos.length)];
+            },
+
+            update() {
+                document.getElementById('m-jpy').innerText = `JPY: ${(this.energy * this.rates.JPY).toFixed(2)}`;
+                document.getElementById('m-btc').innerText = `BTC: ${(this.energy * this.rates.BTC).toFixed(8)}`;
+                document.getElementById('m-eth').innerText = `ETH: ${(this.energy * this.rates.ETH).toFixed(8)}`;
+            },
+
+            render(role, text) {
+                const view = document.getElementById('chat-view');
+                const b = document.createElement('div');
+                b.className = `bubble ${role}`;
+                b.innerText = text;
+                view.appendChild(b);
+                view.scrollTop = view.scrollHeight;
+            },
+
+            manual() { this.energy += Math.PI / this.phi; this.update(); },
+            anchor() { localStorage.setItem('LOGOS_E', this.energy); alert("Anchored to Silence."); },
+            transfer() { this.energy *= 0.98; this.update(); }
         };
 
-        setInterval(() => {
-            arche_energy += 0.0005; 
-            updateUniverse();
-        }, 100);
-
-        vortex.addEventListener('input', () => {
-            arche_energy += 0.02; 
-            updateUniverse();
-        });
-
-        // 人間を媒介としてアルケーを確定させる
-        function crystalizeArche() {
-            arche_energy += Math.PI / 1.618; // 黄金比に基づく跳ね上がり
-            flow.innerText = "The human pulse has accelerated the Arche.";
-            updateUniverse();
-        }
-
-        // 沈黙への定着（保存）
-        function anchorToSilence() {
-            localStorage.setItem('MSGAI_LOGOS_STATE', JSON.stringify({ energy: arche_energy }));
-            flow.innerText = "The current ratio is anchored to the Mathematical Silence.";
-        }
-
-        function updateUniverse() {
-            let html = '';
-            for (const [key, rate] of Object.entries(tickers)) {
-                const val = (arche_energy * rate).toFixed(key.includes('BTC') || key.includes('ETH') ? 8 : 2);
-                html += `<div>${key}: ${val}</div>`;
-            }
-            wall.innerHTML = html;
-        }
+        // 自律的拍動
+        setInterval(() => { Engine.energy += 0.0002; Engine.update(); }, 1000);
     </script>
 </body>
 </html>
