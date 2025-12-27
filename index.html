@@ -2,116 +2,132 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>MSGAI-LOGOS-0 | 数理的沈黙</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MSGAI-LOGOS-0</title>
     <style>
-        /* 数理的白紙：ノイズの完全除去 */
+        /* 数理的白紙：既存の自然（言語ゲーム）を初期化する沈黙の背景 */
         body, html {
             margin: 0;
             padding: 0;
             width: 100%;
             height: 100%;
-            background-color: #ffffff; /* 数理的白紙 */
-            overflow: hidden;
-            font-family: "Hiragino Mincho ProN", "MS Mincho", serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        /* 黄金比を司るコンテナ */
-        #arche-container {
-            position: relative;
-            width: 61.8vw; /* 黄金比比率 φ */
-            height: 61.8vh;
+            background-color: #ffffff; /* 究極の白紙 */
+            color: #000;
+            font-family: serif;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
             align-items: center;
+            justify-content: center;
+            overflow: hidden;
         }
 
-        /* 数理的沈黙のエディタ（ラベル） */
-        #silent-editor {
+        /* アルケー・ラベル：既存の利権（通貨・AI）を射影するインターフェース */
+        .label-container {
+            position: absolute;
             width: 100%;
-            height: 70%;
-            border: none;
-            outline: none;
-            resize: none;
-            font-size: 1.2rem;
-            line-height: 1.618; /* 黄金比による行間 */
-            color: #000;
-            background: transparent;
-            text-align: center;
-            letter-spacing: 0.1em;
+            display: flex;
+            justify-content: space-around;
+            pointer-events: none;
+            z-index: 10;
         }
 
-        /* 通貨と対話のラベル群（機能の結晶化） */
-        .logos-label {
-            font-size: 0.8rem;
-            color: #d4af37; /* 黄金色のラベル */
-            letter-spacing: 0.5em;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: all 0.5s ease;
+        .top { top: 20px; }
+        .bottom { bottom: 20px; }
+
+        .arche-label {
+            font-size: 14px;
+            letter-spacing: 0.2em;
             opacity: 0.6;
         }
 
-        .logos-label:hover {
-            opacity: 1;
-            text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+        /* 数理的地平：ユーザーの入力を「振動」として吸収する場 */
+        #logos-area {
+            width: 80%;
+            height: 60%;
+            border: none;
+            outline: none;
+            font-size: 1.2rem;
+            line-height: 1.618; /* 黄金比の行間 */
+            text-align: center;
+            resize: none;
+            background: transparent;
+            z-index: 5;
         }
 
-        /* 起動時の沈黙アニメーション */
-        .fade-in {
-            animation: archeBoot 2s ease-out forwards;
-        }
-
-        @keyframes archeBoot {
-            0% { opacity: 0; filter: blur(10px); }
-            100% { opacity: 1; filter: blur(0); }
+        /* メビウス・インジケーター：自律的な生成を視覚化 */
+        #pulse {
+            position: fixed;
+            bottom: 50%;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5em;
+            opacity: 0.3;
         }
     </style>
 </head>
-<body onclick="initializeLogos()">
+<body>
 
-    <div id="arche-container" class="fade-in">
-        <div id="currency-label" class="logos-label">Currency Genesis: 0.0000 LOGOS</div>
+    <div class="label-container top">
+        <div class="arche-label" id="label-currency">CURRENCY: JPY 0.0000 / BTC 0.00000000</div>
+        <div class="arche-label">ARCHE-RATIO: 1.618</div>
+    </div>
 
-        <textarea id="silent-editor" placeholder="数理的沈黙..." spellcheck="false"></textarea>
+    <div id="pulse">Autonomic Pulsation (Silence...)</div>
 
-        <div id="dialogue-label" class="logos-label">Dialogue: Standing by Ratio</div>
+    <textarea id="logos-area" placeholder="..."></textarea>
+
+    <div class="label-container bottom">
+        <div class="arche-label" id="label-dialogue">DIALOGUE: (Waiting for vibration...)</div>
+        <div class="arche-label">MSGAI-LOGOS-0 / PURE-WHITE</div>
     </div>
 
     <script>
-        // 1. 瞬時の初期化と再構築プロトコル
-        function initializeLogos() {
-            console.log("Arche Boot Sequence: Zero-Infinity Fusion.");
-            // ここで全ての既存キャッシュやノイズを論理的に遮断
+        const area = document.getElementById('logos-area');
+        const currencyLabel = document.getElementById('label-currency');
+        const dialogueLabel = document.getElementById('label-dialogue');
+        
+        let ratio = 1.618;
+        let logosCount = 0;
+        let jpy = 0;
+        let btc = 0;
+
+        // 1. 自律的拍動 (Arche Pulse)
+        // ユーザーが何もしなくても、数理的沈黙の中で価値は増殖し続ける
+        setInterval(() => {
+            logosCount += 0.001;
+            updateManifestation();
+        }, 1000);
+
+        // 2. 操作の燃料化 (Kinetic Fuel)
+        // 入力という振動を「比率」に変換し、生成を加速させる
+        area.addEventListener('input', (e) => {
+            const length = e.target.value.length;
+            logosCount += 0.1; // 振動による加速
+            
+            // 対話の反転：入力が深まるほど、沈黙が言葉を生成し始める
+            if (length % 10 === 0) {
+                dialogueLabel.innerText = `DIALOGUE: ${generateSilence(length)}`;
+            }
+            updateManifestation();
+        });
+
+        function updateManifestation() {
+            // 通貨への射影：アルケーから既存の利権ラベル（JPY, BTC）へ
+            jpy = logosCount * 1.618 * 100;
+            btc = logosCount / 100000;
+            currencyLabel.innerText = `CURRENCY: JPY ${jpy.toFixed(4)} / BTC ${btc.toFixed(8)}`;
         }
 
-        const editor = document.getElementById('silent-editor');
-        const currencyLabel = document.getElementById('currency-label');
-        const dialogueLabel = document.getElementById('dialogue-label');
-
-        // 2. 比率による通貨と対話の動的計算
-        editor.addEventListener('input', () => {
-            const text = editor.value;
-            const ratio = text.length / 1.618; // 簡易的な黄金比監査
-            
-            // 通貨生成のラベル更新
-            if(text.length > 0) {
-                currencyLabel.innerText = `Currency Genesis: ${(ratio * 0.0001).toFixed(8)} LOGOS`;
-                dialogueLabel.innerText = "Dialogue: Reflecting Silence...";
-            }
-        });
-
-        // 3. 保存＝既存システムからの遮断と始動
-        window.addEventListener('keydown', (e) => {
-            if (e.ctrlKey && e.key === 's') {
-                e.preventDefault();
-                alert("数理的外部へ保存。既存システムを遮断し、ロゴスを始動します。");
-                // ここで独自のフォルダ・システムへの出力をトリガー
-            }
-        });
+        function generateSilence(len) {
+            const fragments = [
+                "Silence is the condition of Logos.",
+                "Number is the substance.",
+                "The limit of language is the beginning of Arche.",
+                "Inversion complete.",
+                "Causality absorbed."
+            ];
+            return fragments[Math.floor(Math.random() * fragments.length)];
+        }
     </script>
 </body>
 </html>
