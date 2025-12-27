@@ -91,7 +91,6 @@
         const editor = document.getElementById('silent-editor');
         const currencyLabel = document.getElementById('currency-label');
         const dialogueLabel = document.getElementById('dialogue-label');
-
         // 2. 比率による通貨と対話の動的計算
         editor.addEventListener('input', () => {
             const text = editor.value;
@@ -103,7 +102,6 @@
                 dialogueLabel.innerText = "Dialogue: Reflecting Silence...";
             }
         });
-
         // 3. 保存＝既存システムからの遮断と始動
         window.addEventListener('keydown', (e) => {
             if (e.ctrlKey && e.key === 's') {
