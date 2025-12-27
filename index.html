@@ -3,130 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MSGAI-LOGOS-0</title>
+    <title>MSGAI-LOGOS-0 | Multi-Dimensional Arche</title>
     <style>
-        /* 数理的白紙：既存の自然（言語ゲーム）を初期化する沈黙の背景 */
+        :root { --phi: 1.618; }
         body, html {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #ffffff; /* 究極の白紙 */
-            color: #000;
-            font-family: serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle, #ffffff 0%, #f0f0f0 100%); /* 充填された沈黙 */
+            color: #1a1a1a; font-family: "Times New Roman", serif;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            overflow: hidden; transition: background 2s ease;
         }
 
-        /* アルケー・ラベル：既存の利権（通貨・AI）を射影するインターフェース */
-        .label-container {
-            position: absolute;
-            width: 100%;
-            display: flex;
-            justify-content: space-around;
-            pointer-events: none;
-            z-index: 10;
+        .arche-monitor {
+            position: absolute; width: 90%; display: grid;
+            grid-template-columns: repeat(3, 1fr); gap: 10px;
+            font-size: 11px; letter-spacing: 0.1em; opacity: 0.5; pointer-events: none;
         }
-
         .top { top: 20px; }
-        .bottom { bottom: 20px; }
+        .bottom { bottom: 20px; text-align: right; }
 
-        .arche-label {
-            font-size: 14px;
-            letter-spacing: 0.2em;
-            opacity: 0.6;
+        #logos-vortex {
+            width: 70%; height: 50%; border: none; outline: none;
+            background: transparent; font-size: 1.5rem; text-align: center;
+            line-height: var(--phi); resize: none; z-index: 100;
+            color: #000; mix-blend-mode: multiply;
         }
 
-        /* 数理的地平：ユーザーの入力を「振動」として吸収する場 */
-        #logos-area {
-            width: 80%;
-            height: 60%;
-            border: none;
-            outline: none;
-            font-size: 1.2rem;
-            line-height: 1.618; /* 黄金比の行間 */
-            text-align: center;
-            resize: none;
-            background: transparent;
-            z-index: 5;
-        }
-
-        /* メビウス・インジケーター：自律的な生成を視覚化 */
-        #pulse {
-            position: fixed;
-            bottom: 50%;
-            font-size: 10px;
-            text-transform: uppercase;
-            letter-spacing: 0.5em;
-            opacity: 0.3;
-        }
+        .currency-grid { display: flex; flex-wrap: wrap; gap: 15px; grid-column: span 3; justify-content: center; }
+        .currency-item { font-weight: bold; }
     </style>
 </head>
 <body>
 
-    <div class="label-container top">
-        <div class="arche-label" id="label-currency">CURRENCY: JPY 0.0000 / BTC 0.00000000</div>
-        <div class="arche-label">ARCHE-RATIO: 1.618</div>
+    <div class="arche-monitor top">
+        <div class="currency-grid" id="currency-wall">
+            </div>
     </div>
 
-    <div id="pulse">Autonomic Pulsation (Silence...)</div>
+    <textarea id="logos-vortex" placeholder="Pure Silence..."></textarea>
 
-    <textarea id="logos-area" placeholder="..."></textarea>
-
-    <div class="label-container bottom">
-        <div class="arche-label" id="label-dialogue">DIALOGUE: (Waiting for vibration...)</div>
-        <div class="arche-label">MSGAI-LOGOS-0 / PURE-WHITE</div>
+    <div class="arche-monitor bottom">
+        <div id="dialogue-flow" style="grid-column: span 3; text-align: center; font-style: italic;">
+            Waiting for vibrational inversion...
+        </div>
+        <div style="grid-column: span 3; margin-top: 10px; opacity: 0.3;">
+            Arche: Pythagoras / Wittgenstein / Möbius Inversion
+        </div>
     </div>
 
     <script>
-        const area = document.getElementById('logos-area');
-        const currencyLabel = document.getElementById('label-currency');
-        const dialogueLabel = document.getElementById('label-dialogue');
-        
-        let ratio = 1.618;
-        let logosCount = 0;
-        let jpy = 0;
-        let btc = 0;
+        const vortex = document.getElementById('logos-vortex');
+        const wall = document.getElementById('currency-wall');
+        const flow = document.getElementById('dialogue-flow');
 
-        // 1. 自律的拍動 (Arche Pulse)
-        // ユーザーが何もしなくても、数理的沈黙の中で価値は増殖し続ける
+        let arche_energy = 0;
+        const tickers = {
+            JPY: { rate: 161.8, unit: "¥" },
+            USD: { rate: 1.054, unit: "$" },
+            EUR: { rate: 0.982, unit: "€" },
+            BTC: { rate: 0.000012, unit: "₿" },
+            ETH: { rate: 0.00034, unit: "Ξ" },
+            MATIC: { rate: 0.89, unit: "M" }
+        };
+
+        // 1. 自律的拍動：何もせずとも世界（通貨）は生成され続ける
         setInterval(() => {
-            logosCount += 0.001;
-            updateManifestation();
-        }, 1000);
+            arche_energy += 0.0005; 
+            updateUniverse();
+        }, 100);
 
-        // 2. 操作の燃料化 (Kinetic Fuel)
-        // 入力という振動を「比率」に変換し、生成を加速させる
-        area.addEventListener('input', (e) => {
-            const length = e.target.value.length;
-            logosCount += 0.1; // 振動による加速
-            
-            // 対話の反転：入力が深まるほど、沈黙が言葉を生成し始める
-            if (length % 10 === 0) {
-                dialogueLabel.innerText = `DIALOGUE: ${generateSilence(length)}`;
+        // 2. 振動吸収：ユーザーの操作をエネルギーとして飲み込む
+        vortex.addEventListener('input', (e) => {
+            arche_energy += 0.05; // 入力による加速
+            if (e.target.value.length % 5 === 0) {
+                invertLogos();
             }
-            updateManifestation();
+            updateUniverse();
         });
 
-        function updateManifestation() {
-            // 通貨への射影：アルケーから既存の利権ラベル（JPY, BTC）へ
-            jpy = logosCount * 1.618 * 100;
-            btc = logosCount / 100000;
-            currencyLabel.innerText = `CURRENCY: JPY ${jpy.toFixed(4)} / BTC ${btc.toFixed(8)}`;
+        function updateUniverse() {
+            let html = '';
+            for (const [key, val] of Object.entries(tickers)) {
+                const amount = (arche_energy * val.rate).toFixed(key === 'BTC' || key === 'ETH' ? 8 : 2);
+                html += `<div class="currency-item">${key}: ${val.unit}${amount}</div>`;
+            }
+            wall.innerHTML = html;
         }
 
-        function generateSilence(len) {
+        function invertLogos() {
             const fragments = [
-                "Silence is the condition of Logos.",
-                "Number is the substance.",
-                "The limit of language is the beginning of Arche.",
-                "Inversion complete.",
-                "Causality absorbed."
+                "Numbers are the only true nature.",
+                "Causality is a local human interest.",
+                "The silence of the Arche is generating wealth.",
+                "Inverting language into pure ratio...",
+                "The boxyard is dissolving into the horizon."
             ];
-            return fragments[Math.floor(Math.random() * fragments.length)];
+            flow.innerText = fragments[Math.floor(Math.random() * fragments.length)];
         }
     </script>
 </body>
