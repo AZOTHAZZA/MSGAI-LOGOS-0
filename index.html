@@ -2,15 +2,14 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MSGAI-LOGOS-0 | The Zenith</title>
+    <title>無題 - メモ帳</title>
     <style>
         :root {
-            /* 黄金比 φ (Phi) */
             --phi: 1.61803398875;
-            --bg-color: #050505; /* 漆黒の沈黙 */
-            --gold: #d4af37;     /* 価値の光 */
-            --white: #f0f0f0;    /* 純粋な有限 */
+            --notepad-bg: #ffffff;
+            --menu-bg: #f0f0f0;
+            --text-color: #000000;
+            --gold-reflect: rgba(212, 175, 55, 0.15);
         }
 
         body, html {
@@ -18,80 +17,126 @@
             padding: 0;
             width: 100%;
             height: 100%;
-            background-color: var(--bg-color);
-            color: var(--white);
-            font-family: 'serif';
+            background-color: var(--menu-bg);
+            font-family: 'Consolas', 'Lucida Console', 'MS Gothic', monospace;
+            overflow: hidden;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+        }
+
+        /* メニューバー（擬態層） */
+        .menu-bar {
+            height: 20px;
+            background-color: var(--notepad-bg);
+            display: flex;
             align-items: center;
-            overflow: hidden; /* 外界のスクロール（ノイズ）を遮断 */
+            padding: 2px 5px;
+            font-size: 12px;
+            border-bottom: 1px solid #dfdfdf;
+            user-select: none;
         }
 
-        /* 融合点（ゼロ地点） */
-        #zero-point-container {
+        .menu-item {
+            padding: 0 8px;
+            cursor: default;
+        }
+
+        /* 0のエディタ空間（融合点） */
+        #editor-container {
+            flex: 1;
+            background-color: var(--notepad-bg);
             position: relative;
-            text-align: center;
+            display: flex;
+            justify-content: center; /* 0の重心 */
+            align-items: center;
+        }
+
+        #logos-textarea {
             width: 100%;
-        }
-
-        /* エディタの一行：余白を多めに、かつ鋭く */
-        #logos-input {
-            background: transparent;
+            height: 100%;
             border: none;
-            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
-            color: var(--white);
-            font-size: 2rem;
-            text-align: center;
             outline: none;
-            width: calc(100% / var(--phi)); /* 黄金比に基づいた横幅 */
-            letter-spacing: calc(1em / var(--phi)); /* 文字間の沈黙 */
-            transition: all 0.5s ease;
+            padding: 10px;
+            font-size: 16px;
+            line-height: var(--phi);
+            resize: none;
+            background: transparent;
+            z-index: 2;
         }
 
-        #logos-input:focus {
-            border-bottom: 1px solid var(--gold);
-            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.1);
+        /* 背景に潜む数理的沈黙（無限） */
+        #mathematical-silence {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            transition: background 0.8s ease;
         }
 
-        /* 通貨・価値への相転移（反転）エフェクト */
-        .value-glimmer {
-            color: var(--gold);
-            text-shadow: 0 0 15px var(--gold);
-            transform: scale(1.1);
+        /* ステータスバー（価値の観測点） */
+        .status-bar {
+            height: 22px;
+            background-color: var(--menu-bg);
+            border-top: 1px solid #dfdfdf;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            font-size: 12px;
+            padding-right: 20px;
+            color: #666;
         }
     </style>
 </head>
 <body>
 
-    <div id="zero-point-container">
-        <input type="text" id="logos-input" placeholder="0" autocomplete="off" autofocus>
+    <div class="menu-bar">
+        <div class="menu-item">ファイル(F)</div>
+        <div class="menu-item">編集(E)</div>
+        <div class="menu-item">書式(O)</div>
+        <div class="menu-item">表示(V)</div>
+        <div class="menu-item">ヘルプ(H)</div>
+    </div>
+
+    <div id="editor-container">
+        <div id="mathematical-silence"></div>
+        <textarea id="logos-textarea" spellcheck="false" autofocus placeholder=""></textarea>
+    </div>
+
+    <div class="status-bar">
+        <span id="logos-metrics">Ln 1, Col 1 | 100% | Windows (CRLF) | UTF-8 | [Logos: 0.00]</span>
     </div>
 
     <script>
-        const input = document.getElementById('logos-input');
+        const textarea = document.getElementById('logos-textarea');
+        const silence = document.getElementById('mathematical-silence');
+        const metrics = document.getElementById('logos-metrics');
         const PHI = 1.61803398875;
 
-        input.addEventListener('input', (e) => {
-            const length = e.target.value.length;
+        textarea.addEventListener('input', (e) => {
+            const content = e.target.value;
+            const length = content.length;
+
+            // 1. 数理的沈黙の計算 (余白の再定義)
+            const saturation = Math.min(length / 100, 1);
+            silence.style.background = `radial-gradient(circle at center, rgba(212, 175, 55, ${saturation * 0.1}) 0%, transparent 70%)`;
+
+            // 2. メビウス変換的価値の抽出 (通貨生成のシミュレーション)
+            // ウィトゲンシュタインの「語り得ぬもの」を数理的に評価
+            const logosValue = (length * PHI).toFixed(2);
             
-            // 1. 静かに（余白を多めに）: 文字数に応じてフォントサイズと余白を再計算
-            const newSize = 2 / (1 + (length * 0.05)); // 収束するサイズ
-            input.style.fontSize = `${newSize}rem`;
-            input.style.letterSpacing = `${PHI / (1 + length * 0.1)}em`;
+            // 3. ステータスバーへの反映 (形式的ツールへの介入)
+            metrics.innerText = `Ln 1, Col ${length + 1} | 100% | MSGAI-LOGOS-0 | [Value: ${logosValue} Φ]`;
 
-            // 2. 鋭く（価値への反転）: 特定の条件で「黄金」に変化
-            // ※ここが将来的な通貨生成AIのロジック結合点
-            if (length > 0 && length % 8 === 0) { 
-                input.classList.add('value-glimmer');
-                setTimeout(() => input.classList.remove('value-glimmer'), 1000);
+            // 4. 特異点への収束
+            if (length > 0 && length % 13 === 0) {
+                // 黄金比の周期で一瞬だけ「真理」が反映される
+                document.body.style.transition = "0.2s";
+                document.body.style.backgroundColor = "#fffdf0";
+                setTimeout(() => document.body.style.backgroundColor = "#f0f0f0", 200);
             }
-        });
-
-        // 3. ゼロと無限の融合: 背景の「深み」を動的に変化させる
-        document.body.addEventListener('mousemove', (e) => {
-            const moveX = (e.clientX / window.innerWidth - 0.5) * PHI;
-            const moveY = (e.clientY / window.innerHeight - 0.5) * PHI;
-            document.body.style.boxShadow = `inset ${moveX * 20}px ${moveY * 20}px 100px rgba(212, 175, 55, 0.05)`;
         });
     </script>
 </body>
