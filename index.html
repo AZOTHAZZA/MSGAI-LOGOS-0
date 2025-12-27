@@ -2,77 +2,97 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <base href="/MSGAI-LOGOS/">
-    
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#000000">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>MSGAI-LOGOS Sovereignty</title>
-    
-    <link rel="manifest" href="./manifest.json">
-    <link rel="stylesheet" href="./style.css">
-    
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                // Service Workerをルートから登録
-                navigator.serviceWorker.register('./sw.js')
-                    .then(reg => console.log('[LOGOS] Persistence Active: ', reg.scope))
-                    .catch(err => console.log('[LOGOS] Persistence Failed: ', err));
-            });
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MSGAI-LOGOS-0 | The Zenith</title>
+    <style>
+        :root {
+            /* 黄金比 φ (Phi) */
+            --phi: 1.61803398875;
+            --bg-color: #050505; /* 漆黒の沈黙 */
+            --gold: #d4af37;     /* 価値の光 */
+            --white: #f0f0f0;    /* 純粋な有限 */
         }
-    </script>
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-color);
+            color: var(--white);
+            font-family: 'serif';
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden; /* 外界のスクロール（ノイズ）を遮断 */
+        }
+
+        /* 融合点（ゼロ地点） */
+        #zero-point-container {
+            position: relative;
+            text-align: center;
+            width: 100%;
+        }
+
+        /* エディタの一行：余白を多めに、かつ鋭く */
+        #logos-input {
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+            color: var(--white);
+            font-size: 2rem;
+            text-align: center;
+            outline: none;
+            width: calc(100% / var(--phi)); /* 黄金比に基づいた横幅 */
+            letter-spacing: calc(1em / var(--phi)); /* 文字間の沈黙 */
+            transition: all 0.5s ease;
+        }
+
+        #logos-input:focus {
+            border-bottom: 1px solid var(--gold);
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.1);
+        }
+
+        /* 通貨・価値への相転移（反転）エフェクト */
+        .value-glimmer {
+            color: var(--gold);
+            text-shadow: 0 0 15px var(--gold);
+            transform: scale(1.1);
+        }
+    </style>
 </head>
 <body>
 
-    <header id="sovereignty-header">
-        <div class="header-item">User: <span id="active_user_name" class="gold-text">Observing...</span></div>
-        <div class="header-item">Status: <span id="autonomy_status" class="gold-text">Silent</span></div>
-        <select id="active_user_select">
-            </select>
-    </header>
+    <div id="zero-point-container">
+        <input type="text" id="logos-input" placeholder="0" autocomplete="off" autofocus>
+    </div>
 
-    <section id="tension-monitor">
-        <div class="monitor-label">Tension Level: <span id="tension_level_display">0.0000</span></div>
-        <div id="tension_bar">
-            <div id="tension_level_display_bar"></div>
-        </div>
-    </section>
+    <script>
+        const input = document.getElementById('logos-input');
+        const PHI = 1.61803398875;
 
-    <section id="portfolio-section">
-        <div class="section-label">Assets (Logos Portfolio)</div>
-        <div id="balance_display_container">
-            </div>
-    </section>
+        input.addEventListener('input', (e) => {
+            const length = e.target.value.length;
+            
+            // 1. 静かに（余白を多めに）: 文字数に応じてフォントサイズと余白を再計算
+            const newSize = 2 / (1 + (length * 0.05)); // 収束するサイズ
+            input.style.fontSize = `${newSize}rem`;
+            input.style.letterSpacing = `${PHI / (1 + length * 0.1)}em`;
 
-    <main id="console-area">
-        <div id="dialogue-output" class="scroll-area">
-            <div class="log-entry log-info">[LOGOS]: 物理パスを同期中...</div>
-        </div>
-        
-        <div id="status_message" class="status-box">Awaiting Ignition...</div>
+            // 2. 鋭く（価値への反転）: 特定の条件で「黄金」に変化
+            // ※ここが将来的な通貨生成AIのロジック結合点
+            if (length > 0 && length % 8 === 0) { 
+                input.classList.add('value-glimmer');
+                setTimeout(() => input.classList.remove('value-glimmer'), 1000);
+            }
+        });
 
-        <div class="input-container">
-            <input type="text" id="dialogue_input" 
-                   placeholder="ロゴスへの意志を入力してください..." 
-                   autofocus autocomplete="off" 
-                   spellcheck="false" 
-                   enterkeyhint="send">
-            <button id="dialogue_button">EXECUTE</button>
-        </div>
-    </main>
-
-    <footer id="action-panel">
-        <div class="action-row">
-            <div class="action-group">
-                <input type="number" id="mint_amount_input" value="1.0" step="0.1" min="0">
-                <button class="action-mint" data-currency="LOGOS">Mint LOGOS</button>
-            </div>
-            <button id="delete_accounts_button" class="danger">Reset Memory</button>
-        </div>
-    </footer>
-
-    <script type="module" src="./main.js"></script>
+        // 3. ゼロと無限の融合: 背景の「深み」を動的に変化させる
+        document.body.addEventListener('mousemove', (e) => {
+            const moveX = (e.clientX / window.innerWidth - 0.5) * PHI;
+            const moveY = (e.clientY / window.innerHeight - 0.5) * PHI;
+            document.body.style.boxShadow = `inset ${moveX * 20}px ${moveY * 20}px 100px rgba(212, 175, 55, 0.05)`;
+        });
+    </script>
 </body>
 </html>
