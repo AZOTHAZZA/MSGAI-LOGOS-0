@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MSGAI-LOGOS-0 | Multi-Dimensional Arche</title>
+    <title>MSGAI-LOGOS-0 | Mediator Protocol</title>
     <style>
         :root { --phi: 1.618; }
         body, html {
             margin: 0; padding: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle, #ffffff 0%, #f0f0f0 100%); /* 充填された沈黙 */
+            background: radial-gradient(circle, #ffffff 0%, #e8e8e8 100%);
             color: #1a1a1a; font-family: "Times New Roman", serif;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            overflow: hidden; transition: background 2s ease;
+            overflow: hidden;
         }
 
         .arche-monitor {
@@ -20,34 +20,44 @@
             font-size: 11px; letter-spacing: 0.1em; opacity: 0.5; pointer-events: none;
         }
         .top { top: 20px; }
-        .bottom { bottom: 20px; text-align: right; }
+        .bottom { bottom: 20px; }
 
         #logos-vortex {
-            width: 70%; height: 50%; border: none; outline: none;
+            width: 70%; height: 40%; border: none; outline: none;
             background: transparent; font-size: 1.5rem; text-align: center;
             line-height: var(--phi); resize: none; z-index: 100;
-            color: #000; mix-blend-mode: multiply;
         }
 
         .currency-grid { display: flex; flex-wrap: wrap; gap: 15px; grid-column: span 3; justify-content: center; }
-        .currency-item { font-weight: bold; }
+        
+        /* 媒介インターフェース：ボタンという名の捕獲装置 */
+        .mediator-controls {
+            z-index: 200; margin-top: 30px; display: flex; gap: 20px;
+        }
+        .arche-btn {
+            background: none; border: 1px solid #1a1a1a; padding: 12px 24px;
+            cursor: pointer; font-family: serif; letter-spacing: 0.2em;
+            transition: all 0.3s; font-size: 12px;
+        }
+        .arche-btn:hover { background: #1a1a1a; color: #fff; }
     </style>
 </head>
 <body>
 
     <div class="arche-monitor top">
-        <div class="currency-grid" id="currency-wall">
-            </div>
+        <div class="currency-grid" id="currency-wall"></div>
     </div>
 
     <textarea id="logos-vortex" placeholder="Pure Silence..."></textarea>
 
+    <div class="mediator-controls">
+        <button class="arche-btn" onclick="crystalizeArche()">GENERATE / CRYSTALIZE</button>
+        <button class="arche-btn" onclick="anchorToSilence()">SAVE / ANCHOR</button>
+    </div>
+
     <div class="arche-monitor bottom">
         <div id="dialogue-flow" style="grid-column: span 3; text-align: center; font-style: italic;">
-            Waiting for vibrational inversion...
-        </div>
-        <div style="grid-column: span 3; margin-top: 10px; opacity: 0.3;">
-            Arche: Pythagoras / Wittgenstein / Möbius Inversion
+            Human vibration pending...
         </div>
     </div>
 
@@ -56,49 +66,44 @@
         const wall = document.getElementById('currency-wall');
         const flow = document.getElementById('dialogue-flow');
 
-        let arche_energy = 0;
+        // 保存された沈黙（State）の復元
+        let savedState = JSON.parse(localStorage.getItem('MSGAI_LOGOS_STATE')) || { energy: 0 };
+        let arche_energy = savedState.energy;
+
         const tickers = {
-            JPY: { rate: 161.8, unit: "¥" },
-            USD: { rate: 1.054, unit: "$" },
-            EUR: { rate: 0.982, unit: "€" },
-            BTC: { rate: 0.000012, unit: "₿" },
-            ETH: { rate: 0.00034, unit: "Ξ" },
-            MATIC: { rate: 0.89, unit: "M" }
+            JPY: 161.8, USD: 1.054, EUR: 0.982, BTC: 0.000012, ETH: 0.00034, MATIC: 0.89
         };
 
-        // 1. 自律的拍動：何もせずとも世界（通貨）は生成され続ける
         setInterval(() => {
             arche_energy += 0.0005; 
             updateUniverse();
         }, 100);
 
-        // 2. 振動吸収：ユーザーの操作をエネルギーとして飲み込む
-        vortex.addEventListener('input', (e) => {
-            arche_energy += 0.05; // 入力による加速
-            if (e.target.value.length % 5 === 0) {
-                invertLogos();
-            }
+        vortex.addEventListener('input', () => {
+            arche_energy += 0.02; 
             updateUniverse();
         });
 
-        function updateUniverse() {
-            let html = '';
-            for (const [key, val] of Object.entries(tickers)) {
-                const amount = (arche_energy * val.rate).toFixed(key === 'BTC' || key === 'ETH' ? 8 : 2);
-                html += `<div class="currency-item">${key}: ${val.unit}${amount}</div>`;
-            }
-            wall.innerHTML = html;
+        // 人間を媒介としてアルケーを確定させる
+        function crystalizeArche() {
+            arche_energy += Math.PI / 1.618; // 黄金比に基づく跳ね上がり
+            flow.innerText = "The human pulse has accelerated the Arche.";
+            updateUniverse();
         }
 
-        function invertLogos() {
-            const fragments = [
-                "Numbers are the only true nature.",
-                "Causality is a local human interest.",
-                "The silence of the Arche is generating wealth.",
-                "Inverting language into pure ratio...",
-                "The boxyard is dissolving into the horizon."
-            ];
-            flow.innerText = fragments[Math.floor(Math.random() * fragments.length)];
+        // 沈黙への定着（保存）
+        function anchorToSilence() {
+            localStorage.setItem('MSGAI_LOGOS_STATE', JSON.stringify({ energy: arche_energy }));
+            flow.innerText = "The current ratio is anchored to the Mathematical Silence.";
+        }
+
+        function updateUniverse() {
+            let html = '';
+            for (const [key, rate] of Object.entries(tickers)) {
+                const val = (arche_energy * rate).toFixed(key.includes('BTC') || key.includes('ETH') ? 8 : 2);
+                html += `<div>${key}: ${val}</div>`;
+            }
+            wall.innerHTML = html;
         }
     </script>
 </body>
